@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Senyonjo Disan — Backend Developer</title>
+<meta name="description" content="Senyonjo Disan, Junior Backend Developer in Kampala, Uganda. Building APIs with Python, FastAPI and PostgreSQL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --bg:#F6F7F9;
+    --panel:#FFFFFF;
+    --ink:#12181F;
+    --muted:#5B6572;
+    --faint:#8A93A0;
+    --border:#E3E6EB;
+    --accent:#3355FF;
+    --accent-dark:#1F3ECC;
+    --accent-tint:#EDF0FF;
+    --accent-glow:rgba(51,85,255,0.12);
+    --success:#1E9E5B;
+    --success-tint:#E6F6EC;
+    --progress:#C1740B;
+    --progress-tint:#FBF0DC;
+    --radius:16px;
+    --radius-sm:12px;
+    --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+    --shadow-sm:0 2px 8px rgba(18,24,31,0.04);
+    --shadow-md:0 8px 28px rgba(18,24,31,0.07);
+    --shadow-lg:0 20px 50px rgba(18,24,31,0.1);
+    --transition-base:0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth:0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --nav-bg:rgba(246,247,249,0.85);
+    --orb-opacity:0.12;
+    --grid-color:#D6DAE2;
+    --btn-outline-bg:#FFFFFF;
+  }
+
+  [data-theme="dark"] {
+    --bg:#0F172A;
+    --panel:#1E293B;
+    --ink:#F1F5F9;
+    --muted:#94A3B8;
+    --faint:#64748B;
+    --border:#334155;
+    --accent:#60A5FA;
+    --accent-dark:#3B82F6;
+    --accent-tint:rgba(96,165,250,0.1);
+    --accent-glow:rgba(96,165,250,0.12);
+    --success:#34D399;
+    --success-tint:rgba(52,211,153,0.1);
+    --progress:#FBBF24;
+    --progress-tint:rgba(251,191,36,0.1);
+    --shadow-sm:0 2px 8px rgba(0,0,0,0.2);
+    --shadow-md:0 8px 28px rgba(0,0,0,0.3);
+    --shadow-lg:0 20px 50px rgba(0,0,0,0.4);
+    --nav-bg:rgba(15,23,42,0.85);
+    --orb-opacity:0.06;
+    --grid-color:#1E293B;
+    --btn-outline-bg:#1E293B;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-sans);
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background var(--transition-smooth), color var(--transition-smooth);
+  }
+
+  ::selection{background:var(--accent);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+
+  /* ===== ACTIVE BACKGROUND ===== */
+  .animated-bg{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+  }
+  .orb{
+    position:absolute;border-radius:50%;filter:blur(100px);opacity:var(--orb-opacity);
+    animation:floatOrb 18s ease-in-out infinite;
+    transition:opacity var(--transition-smooth);
+  }
+  .orb:nth-child(1){
+    width:450px;height:450px;background:var(--accent);top:-10%;left:-8%;
+    animation-delay:0s;
+  }
+  .orb:nth-child(2){
+    width:380px;height:380px;background:var(--accent);bottom:-12%;right:-10%;
+    animation-delay:-6s;
+  }
+  .orb:nth-child(3){
+    width:320px;height:320px;background:var(--accent);top:55%;left:55%;
+    animation-delay:-12s;
+  }
+  @keyframes floatOrb{
+    0%,100%{transform:translate(0,0) scale(1) rotate(0deg);}
+    25%{transform:translate(80px,-50px) scale(1.1) rotate(3deg);}
+    50%{transform:translate(40px,80px) scale(0.9) rotate(-2deg);}
+    75%{transform:translate(-80px,30px) scale(1.05) rotate(1deg);}
+  }
+
+  .grid-pattern{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(circle, var(--grid-color) 1px, transparent 1px);
+    background-size:30px 30px;
+    -webkit-mask-image:radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 85%);
+    mask-image:radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 85%);
+    animation:gridShift 25s linear infinite;
+    transition:background-image var(--transition-smooth);
+  }
+  @keyframes gridShift{
+    0%{transform:translate(0,0);}
+    100%{transform:translate(30px,30px);}
+  }
+
+  .particles-container{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+  }
+  .particle{
+    position:absolute;background:var(--accent);border-radius:50%;
+    opacity:0;animation:rise 8s ease-in infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(100vh) scale(0);opacity:0;}
+    10%{opacity:0.35;}
+    90%{opacity:0.35;}
+    100%{transform:translateY(-10vh) scale(1);opacity:0;}
+  }
+
+  .cursor-glow{
+    width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle, rgba(51,85,255,0.06) 0%, transparent 70%);
+    position:fixed;pointer-events:none;z-index:9998;
+    transform:translate(-50%,-50%);transition:opacity 0.3s ease;
+  }
+
+  /* ===== THEME TOGGLE ===== */
+  .theme-toggle{
+    background:var(--panel);border:1px solid var(--border);
+    width:42px;height:42px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:1.1rem;color:var(--ink);
+    transition:all var(--transition-base);position:relative;z-index:101;
+  }
+  .theme-toggle:hover{
+    border-color:var(--accent);color:var(--accent);
+    transform:rotate(30deg);box-shadow:0 4px 12px var(--accent-glow);
+  }
+
+  /* ===== NAVIGATION ===== */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:var(--nav-bg);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    transition:box-shadow var(--transition-smooth), background var(--transition-smooth);
+  }
+  nav.scrolled{box-shadow:0 6px 28px rgba(0,0,0,0.1);}
+  .nav-inner{
+    max-width:1160px;margin:0 auto;padding:1rem 2rem;
+    display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  }
+  .logo{
+    font-weight:800;font-size:1.3rem;color:var(--ink);
+    display:flex;align-items:center;gap:.35rem;letter-spacing:-.03em;
+    transition:transform var(--transition-base);
+  }
+  .logo:hover{transform:translateY(-1px);}
+  .logo span{color:var(--accent);}
+  .nav-links{list-style:none;display:flex;align-items:center;gap:1.8rem;}
+  .nav-links a{
+    color:var(--muted);font-weight:500;font-size:.9rem;
+    transition:color var(--transition-base);position:relative;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;
+    background:var(--accent);border-radius:2px;
+    transition:width var(--transition-smooth);
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a:hover::after{width:100%;}
+  .btn-nav{
+    background:var(--ink);color:var(--bg);padding:.55rem 1.2rem;border-radius:10px;
+    font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:.5rem;
+    transition:all var(--transition-base);
+  }
+  .btn-nav:hover{background:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px var(--accent-glow);}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;z-index:1;max-width:1160px;margin:0 auto;
+    padding:5.5rem 2rem 5rem;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:4rem;align-items:center;
+  }
+  .availability-badge{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.8rem;font-weight:600;color:var(--accent);
+    background:var(--accent-tint);border:1px solid var(--accent);
+    padding:.4rem .9rem;border-radius:999px;margin-bottom:1.8rem;
+    opacity:0.9;
+  }
+  .availability-badge .dot{
+    width:7px;height:7px;border-radius:50%;background:var(--success);
+    box-shadow:0 0 8px var(--success);
+    animation:pulse-dot 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot{
+    0%,100%{box-shadow:0 0 8px var(--success);}
+    50%{box-shadow:0 0 18px var(--success);}
+  }
+  .hero-content h1{
+    font-size:clamp(2.8rem,5.5vw,4.2rem);font-weight:900;
+    line-height:1.05;letter-spacing:-.04em;color:var(--ink);margin-bottom:.5rem;
+  }
+  .hero-content h1 span{color:var(--accent);}
+  .hero-title{
+    font-size:clamp(1.05rem,2vw,1.3rem);color:var(--accent);
+    font-weight:600;margin-bottom:1.4rem;
+  }
+  .hero-description{
+    font-size:1.08rem;color:var(--muted);max-width:480px;
+    margin-bottom:2.2rem;line-height:1.7;
+  }
+  .hero-buttons{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:2rem;}
+  .btn{
+    padding:.9rem 1.6rem;border-radius:12px;font-weight:600;font-size:.92rem;
+    display:inline-flex;align-items:center;gap:.55rem;
+    transition:all var(--transition-smooth);position:relative;overflow:hidden;
+  }
+  .btn::after{
+    content:'';position:absolute;top:50%;left:50%;width:0;height:0;
+    border-radius:50%;background:rgba(255,255,255,0.2);
+    transform:translate(-50%,-50%);transition:all 0.7s ease;
+  }
+  .btn:hover::after{width:400px;height:400px;}
+  .btn-primary{
+    background:var(--accent);color:#fff;
+    box-shadow:0 8px 24px var(--accent-glow);
+    animation:btnGlow 3s ease-in-out infinite;
+  }
+  @keyframes btnGlow{
+    0%,100%{box-shadow:0 8px 24px var(--accent-glow);}
+    50%{box-shadow:0 14px 36px var(--accent-glow);}
+  }
+  .btn-primary:hover{
+    background:var(--accent-dark);transform:translateY(-3px);
+  }
+  .btn-outline{
+    background:var(--btn-outline-bg);color:var(--ink);border:1.5px solid var(--border);
+  }
+  .btn-outline:hover{
+    border-color:var(--accent);color:var(--accent);
+    transform:translateY(-3px);box-shadow:var(--shadow-sm);
+  }
+  .hero-meta{
+    display:flex;align-items:center;gap:1.8rem;
+    font-size:.85rem;color:var(--muted);
+  }
+  .hero-meta span{display:flex;align-items:center;gap:.4rem;}
+  .hero-meta i{color:var(--accent);}
+
+  .hero-visual{display:flex;flex-direction:column;gap:1.2rem;align-items:center;}
+  .photo-card{
+    width:220px;height:220px;border-radius:50%;overflow:hidden;
+    border:4px solid var(--accent-tint);
+    box-shadow:0 20px 50px var(--accent-glow);
+    transition:all var(--transition-smooth);
+    animation:photoFloat 5s ease-in-out infinite;
+  }
+  @keyframes photoFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+  .photo-card:hover{
+    transform:translateY(-6px) scale(1.03);
+    box-shadow:0 30px 70px var(--accent-glow);
+    border-color:var(--accent);
+    animation:none;
+  }
+  .photo-card img{width:100%;height:100%;object-fit:cover;}
+  .info-chip{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:.9rem 1.3rem;
+    display:flex;align-items:center;gap:.8rem;
+    box-shadow:var(--shadow-sm);
+    transition:all var(--transition-smooth);
+  }
+  .info-chip:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-md);
+    border-color:var(--accent);
+  }
+  .info-chip i{color:var(--accent);font-size:1.2rem;}
+  .info-chip .label{font-weight:600;font-size:.9rem;color:var(--ink);}
+  .info-chip .value{font-size:.82rem;color:var(--muted);}
+
+  /* ===== SECTIONS ===== */
+  section{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:5rem 2rem;}
+  .section-header{margin-bottom:3rem;}
+  .section-label{
+    font-size:.78rem;font-weight:700;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:.7rem;
+  }
+  .section-header h2{
+    font-size:clamp(1.9rem,3.5vw,2.5rem);font-weight:800;
+    letter-spacing:-.02em;color:var(--ink);margin-bottom:.6rem;
+  }
+  .section-header p{color:var(--muted);font-size:1.02rem;max-width:520px;}
+
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem;}
+  .tech-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:1.8rem 1.4rem;text-align:center;
+    transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden;
+  }
+  .tech-card::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 0%, var(--accent-tint), transparent 70%);
+    opacity:0;transition:opacity var(--transition-smooth);
+  }
+  .tech-card:hover::before{opacity:1;}
+  .tech-card:hover{
+    transform:translateY(-6px);border-color:var(--accent);
+    box-shadow:var(--shadow-md);
+  }
+  .tech-icon{font-size:2rem;color:var(--accent);margin-bottom:.8rem;transition:transform var(--transition-smooth);position:relative;z-index:1;}
+  .tech-card:hover .tech-icon{transform:scale(1.2) rotate(5deg);}
+  .tech-card h4{font-weight:700;font-size:.95rem;color:var(--ink);position:relative;z-index:1;}
+  .tech-card .sub{font-size:.75rem;color:var(--faint);margin-top:.3rem;position:relative;z-index:1;}
+
+  .skills-section{margin-top:1.2rem;}
+  .skills-section h3{font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:1rem;}
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
+  .skill-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:1.3rem;display:flex;align-items:center;gap:.9rem;
+    transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+  }
+  .skill-card:hover{
+    transform:translateY(-4px);border-color:var(--accent);
+    box-shadow:var(--shadow-md);
+  }
+  .skill-icon{
+    width:40px;height:40px;flex-shrink:0;border-radius:10px;
+    background:var(--accent-tint);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+    transition:all var(--transition-smooth);
+  }
+  .skill-card:hover .skill-icon{transform:scale(1.1) rotate(-5deg);}
+  .skill-card h4{font-weight:600;font-size:.9rem;color:var(--ink);}
+
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.2rem;}
+  .project-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:2rem;transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden;
+  }
+  .project-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+    transform:scaleX(0);transition:transform var(--transition-smooth);
+  }
+  .project-card::after{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--accent-tint), transparent 60%);
+    opacity:0;transition:opacity var(--transition-smooth);
+  }
+  .project-card:hover::after{opacity:1;}
+  .project-card:hover::before{transform:scaleX(1);}
+  .project-card:hover{
+    transform:translateY(-5px);border-color:var(--accent);box-shadow:var(--shadow-md);
+  }
+  .project-badges{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;position:relative;z-index:1;}
+  .badge{
+    font-size:.74rem;font-weight:700;padding:.3rem .7rem;
+    border-radius:7px;letter-spacing:.02em;
+  }
+  .badge-deployed{background:var(--success-tint);color:var(--success);}
+  .badge-progress{background:var(--progress-tint);color:var(--progress);}
+  .project-card h3{font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:.7rem;position:relative;z-index:1;transition:color var(--transition-base);}
+  .project-card:hover h3{color:var(--accent);}
+  .project-card p{color:var(--muted);margin-bottom:1.2rem;line-height:1.65;position:relative;z-index:1;}
+  .project-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.3rem;position:relative;z-index:1;}
+  .tag{
+    font-size:.76rem;background:var(--bg);color:var(--muted);
+    border:1px solid var(--border);padding:.3rem .75rem;border-radius:7px;
+    transition:all var(--transition-base);
+  }
+  .tag:hover{background:var(--accent-tint);border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+  .project-link{
+    color:var(--accent);font-weight:600;font-size:.9rem;
+    display:inline-flex;align-items:center;gap:.5rem;position:relative;z-index:1;
+    transition:gap var(--transition-base), color var(--transition-base);
+  }
+  .project-link:hover{gap:.8rem;}
+  .project-link i{transition:transform var(--transition-base);}
+  .project-link:hover i{transform:translateX(5px);}
+
+  .education-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:2rem 2.2rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.8rem;
+    transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+  }
+  .education-card:hover{
+    transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--shadow-md);
+  }
+  .edu-icon{
+    width:58px;height:58px;border-radius:14px;background:var(--accent-tint);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;
+    transition:all var(--transition-smooth);
+  }
+  .education-card:hover .edu-icon{transform:scale(1.08) rotate(3deg);}
+  .edu-info h3{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;}
+  .edu-info .degree{color:var(--accent);font-weight:600;font-size:1rem;margin-bottom:.2rem;}
+  .edu-info .university{color:var(--muted);font-size:.9rem;display:flex;align-items:center;gap:.4rem;}
+
+  .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;margin-bottom:2.4rem;}
+  .about-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:2rem;transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+  }
+  .about-card:hover{
+    transform:translateY(-5px);border-color:var(--accent);box-shadow:var(--shadow-md);
+  }
+  .about-card-icon{
+    width:46px;height:46px;border-radius:12px;background:var(--accent-tint);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.1rem;
+    transition:all var(--transition-smooth);
+  }
+  .about-card:hover .about-card-icon{transform:scale(1.15) rotate(-6deg);}
+  .about-card h3{font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:.6rem;transition:color var(--transition-base);}
+  .about-card:hover h3{color:var(--accent);}
+  .about-card p{color:var(--muted);font-size:.95rem;line-height:1.7;}
+  .about-card p strong{color:var(--ink);font-weight:600;}
+
+  .stats-row{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;
+  }
+  .stat-item{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:1.6rem;text-align:center;
+    transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden;
+  }
+  .stat-item::after{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at center, var(--accent-tint), transparent);
+    opacity:0;transition:opacity var(--transition-smooth);
+  }
+  .stat-item:hover::after{opacity:1;}
+  .stat-item:hover{
+    transform:translateY(-5px) scale(1.03);border-color:var(--accent);box-shadow:var(--shadow-md);
+  }
+  .stat-number{
+    font-size:2.4rem;font-weight:900;color:var(--accent);line-height:1;margin-bottom:.4rem;
+    position:relative;z-index:1;transition:transform var(--transition-smooth);
+  }
+  .stat-item:hover .stat-number{transform:scale(1.1);}
+  .stat-label{font-size:.85rem;color:var(--muted);font-weight:500;position:relative;z-index:1;}
+
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.4rem;}
+  .contact-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:2.2rem;transition:all var(--transition-smooth);box-shadow:var(--shadow-sm);
+  }
+  .contact-card:hover{
+    transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--shadow-md);
+  }
+  .contact-card h3{
+    font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;color:var(--ink);
+    display:flex;align-items:center;gap:.6rem;
+  }
+  .contact-card h3 i{color:var(--accent);font-size:1.1rem;}
+  .contact-item{
+    display:flex;align-items:center;gap:1rem;padding:.9rem 0;
+    border-bottom:1px solid var(--border);
+    transition:all var(--transition-base);border-radius:8px;
+  }
+  .contact-item:last-child{border-bottom:none;}
+  .contact-item:hover{padding-left:.5rem;background:var(--accent-tint);}
+  .contact-item-icon{
+    width:42px;height:42px;border-radius:11px;background:var(--accent-tint);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;
+    transition:all var(--transition-base);
+  }
+  .contact-item:hover .contact-item-icon{transform:scale(1.1) rotate(-3deg);}
+  .contact-item-label{font-size:.72rem;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.12rem;}
+  .contact-item-value{color:var(--ink);font-weight:500;font-size:.94rem;}
+  a.contact-item-value:hover{color:var(--accent);}
+
+  .social-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+  .social-btn{
+    display:flex;align-items:center;gap:.7rem;padding:.85rem 1.1rem;border-radius:var(--radius-sm);
+    font-weight:600;font-size:.87rem;color:var(--ink);
+    background:var(--bg);border:1px solid var(--border);
+    transition:all var(--transition-smooth);position:relative;overflow:hidden;
+  }
+  .social-btn::after{
+    content:'';position:absolute;top:50%;left:50%;width:0;height:0;
+    border-radius:50%;background:var(--accent-tint);
+    transform:translate(-50%,-50%);transition:all 0.6s ease;
+  }
+  .social-btn:hover::after{width:350px;height:350px;}
+  .social-btn i{color:var(--accent);font-size:1.1rem;transition:transform var(--transition-base);position:relative;z-index:1;}
+  .social-btn span{position:relative;z-index:1;}
+  .social-btn:hover{
+    transform:translateY(-3px);border-color:var(--accent);
+    background:var(--accent-tint);box-shadow:0 8px 20px var(--accent-glow);
+  }
+  .social-btn:hover i{transform:scale(1.2);}
+
+  footer{
+    text-align:center;padding:2.5rem 2rem;color:var(--faint);font-size:.85rem;
+    border-top:1px solid var(--border);position:relative;z-index:1;
+    transition:color var(--transition-smooth), border-color var(--transition-smooth);
+  }
+
+  .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;text-align:center;padding-top:3rem;}
+    .hero-description{margin-left:auto;margin-right:auto;}
+    .hero-buttons{justify-content:center;}
+    .hero-meta{justify-content:center;}
+    .nav-links a:not(.btn-nav){display:none;}
+    .cursor-glow{display:none;}
+  }
+  @media (max-width:520px){
+    .hero,section{padding-left:1.25rem;padding-right:1.25rem;}
+    .projects-grid{grid-template-columns:1fr;}
+    .social-grid{grid-template-columns:1fr 1fr;}
+    .hero-buttons{flex-direction:column;align-items:stretch;}
+    .btn{justify-content:center;}
+    .photo-card{width:180px;height:180px;}
+  }
+</style>
+</head>
+<body data-theme="light">
+  <div class="animated-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+  <div class="grid-pattern"></div>
+  <div class="particles-container" id="particles"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="logo">Senyonjo<span>.</span></div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#tech">Stack</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Connect</a></li>
+        <li>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+          </button>
+        </li>
+        <li><a href="https://github.com/Dyte77" target="_blank" rel="noopener noreferrer" class="btn-nav"><i class="fab fa-github"></i> GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <div class="availability-badge"><span class="dot"></span> Available for backend roles</div>
+      <h1>Senyonjo <span>Disan</span></h1>
+      <div class="hero-title">Backend Developer</div>
+      <p class="hero-description">
+        I design and ship APIs that hold up under real traffic — clean data models, sound authentication, and code that's easy for the next developer to read. Currently building with Python, FastAPI, and PostgreSQL.
+      </p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary"><i class="fas fa-arrow-right"></i> View projects</a>
+        <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> Get in touch</a>
+      </div>
+      <div class="hero-meta">
+        <span><i class="fas fa-location-dot"></i> Kampala, Uganda</span>
+        <span><i class="fas fa-graduation-cap"></i> Victoria University</span>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="photo-card">
+        <img src="Disan-removebg-preview.png" alt="Senyonjo Disan">
+      </div>
+      <div class="info-chip">
+        <i class="fas fa-code"></i>
+        <div>
+          <div class="label">Senyonjo Disan</div>
+          <div class="value">Junior Backend Developer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech">
+    <div class="section-header reveal">
+      <div class="section-label">Tech Stack</div>
+      <h2>What I build with</h2>
+      <p>The core tools I reach for when designing and shipping backend systems.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal"><div class="tech-icon"><i class="fab fa-python"></i></div><h4>Python</h4><div class="sub">Django</div></div>
+      <div class="tech-card reveal"><div class="tech-icon"><i class="fas fa-bolt"></i></div><h4>FastAPI</h4></div>
+      <div class="tech-card reveal"><div class="tech-icon"><i class="fas fa-database"></i></div><h4>PostgreSQL</h4></div>
+      <div class="tech-card reveal"><div class="tech-icon"><i class="fas fa-cubes"></i></div><h4>SQLAlchemy</h4></div>
+      <div class="tech-card reveal"><div class="tech-icon"><i class="fas fa-code-branch"></i></div><h4>Git</h4></div>
+    </div>
+
+    <div class="skills-section">
+      <h3 class="reveal">Additional skills</h3>
+      <div class="skills-grid">
+        <div class="skill-card reveal"><div class="skill-icon"><i class="fas fa-plug"></i></div><h4>API Integration</h4></div>
+        <div class="skill-card reveal"><div class="skill-icon"><i class="fas fa-vial"></i></div><h4>API Testing</h4></div>
+        <div class="skill-card reveal"><div class="skill-icon"><i class="fas fa-infinity"></i></div><h4>CI/CD Automation</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-header reveal">
+      <div class="section-label">Projects</div>
+      <h2>Featured work</h2>
+      <p>A few APIs I've designed and shipped.</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-badges">
+          <span class="badge badge-deployed">Deployed</span>
+        </div>
+        <h3>Patient Management System</h3>
+        <p>A healthcare API for managing patient records, appointments, and medical data, with JWT-based authentication to keep access controlled.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+        </div>
+        <a href="https://github.com/Dyte77/Patient_Management_System.git" target="_blank" rel="noopener noreferrer" class="project-link">View repository <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-badges">
+          <span class="badge badge-deployed">Deployed</span>
+        </div>
+        <h3>User Auth & Registration API</h3>
+        <p>Secure user authentication covering registration, login, JWT tokens, and password hashing — built to be a reliable base for other services.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">JWT</span><span class="tag">OAuth2</span>
+        </div>
+        <a href="https://github.com/Dyte77/user-authentication-and_registration_API.git" target="_blank" rel="noopener noreferrer" class="project-link">View repository <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-badges">
+          <span class="badge badge-progress">In Development</span>
+        </div>
+        <h3>D_Rental</h3>
+        <p>A rental management platform in progress — property listings, tenant management, and payments, built around a clean relational data model.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+        </div>
+        <a href="https://github.com/Dyte77/D_Rental.git" target="_blank" rel="noopener noreferrer" class="project-link">Follow development <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-header reveal">
+      <div class="section-label">About</div>
+      <h2>Get to know me</h2>
+      <p>The developer behind the code.</p>
+    </div>
+
+    <div class="education-card reveal">
+      <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
+      <div class="edu-info">
+        <h3>Education</h3>
+        <div class="degree">Bachelor of Science in Software Engineering</div>
+        <div class="university"><i class="fas fa-university"></i> Victoria University</div>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <div class="about-card-icon"><i class="fas fa-user"></i></div>
+        <h3>Who I am</h3>
+        <p>I'm <strong>Senyonjo Disan</strong>, a Junior Backend Developer based in <strong>Kampala, Uganda</strong>, focused on building scalable APIs with clean, maintainable architecture.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-icon"><i class="fas fa-lightbulb"></i></div>
+        <h3>How I work</h3>
+        <p>I favor <strong>clean code</strong>, <strong>type safety</strong>, and <strong>async programming</strong> where it earns its complexity — software that's easy to trust and easy to extend.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-icon"><i class="fas fa-rocket"></i></div>
+        <h3>Current focus</h3>
+        <p>Shipping <strong>production-ready APIs</strong> while sharpening my <strong>system design</strong> and <strong>cloud deployment</strong> skills. Open to collaborations.</p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item reveal"><div class="stat-number">3+</div><div class="stat-label">Projects Built</div></div>
+      <div class="stat-item reveal"><div class="stat-number">2</div><div class="stat-label">Deployed APIs</div></div>
+      <div class="stat-item reveal"><div class="stat-number">8+</div><div class="stat-label">Technologies</div></div>
+      <div class="stat-item reveal"><div class="stat-number">1.5yr</div><div class="stat-label">Experience</div></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-header reveal">
+      <div class="section-label">Contact</div>
+      <h2>Let's connect</h2>
+      <p>Available for collaborations and backend developer opportunities.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card reveal">
+        <h3><i class="fas fa-address-card"></i> Reach me</h3>
+        <div class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <a href="mailto:disansenyonjo@gmail.com" class="contact-item-value">disansenyonjo@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-location-dot"></i></div>
+          <div>
+            <div class="contact-item-label">Location</div>
+            <div class="contact-item-value">Kampala, Uganda</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="contact-item-label">Phone</div>
+            <a href="tel:+256785750898" class="contact-item-value">+256 785 750 898</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card reveal">
+        <h3><i class="fas fa-share-nodes"></i> Social links</h3>
+        <div class="social-grid">
+          <a href="mailto:disansenyonjo@gmail.com" class="social-btn"><i class="fas fa-envelope"></i> <span>Email</span></a>
+          <a href="https://wa.me/256785750898" target="_blank" rel="noopener noreferrer" class="social-btn"><i class="fab fa-whatsapp"></i> <span>WhatsApp</span></a>
+          <a href="https://x.com/disan97377" target="_blank" rel="noopener noreferrer" class="social-btn"><i class="fa-brands fa-x-twitter"></i> <span>X</span></a>
+          <a href="https://github.com/Dyte77" target="_blank" rel="noopener noreferrer" class="social-btn"><i class="fab fa-github"></i> <span>GitHub</span></a>
+          <a href="https://www.linkedin.com/in/senyonjo-disan/" target="_blank" rel="noopener noreferrer" class="social-btn"><i class="fab fa-linkedin"></i> <span>LinkedIn</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Senyonjo Disan — Built with Python expertise & a bit of coffee</p>
+  </footer>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    const icon = themeToggle.querySelector('i');
+
+    themeToggle.addEventListener('click', () => {
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem('theme', next);
+    });
+
+    // Load saved theme
+    const saved = localStorage.getItem('theme') || 'light';
+    body.setAttribute('data-theme', saved);
+    icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    // Particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.width = Math.random() * 4 + 2 + 'px';
+      p.style.height = p.style.width;
+      p.style.animationDelay = Math.random() * 8 + 's';
+      p.style.animationDuration = Math.random() * 6 + 8 + 's';
+      particlesContainer.appendChild(p);
+    }
+
+    // Cursor glow
+    const glow = document.getElementById('cursorGlow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // Navbar
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 30);
+    });
+
+    // Reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Mouse tracking for project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', x + '%');
+        card.style.setProperty('--my', y + '%');
+      });
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+  </script>
+</body>
+</html>
