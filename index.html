@@ -80,7 +80,6 @@
             text-decoration: none;
         }
 
-        /* Background orbs */
         .bg-orbs {
             position: fixed;
             inset: 0;
@@ -134,7 +133,6 @@
             }
         }
 
-        /* Grid */
         .grid-pattern {
             position: fixed;
             inset: 0;
@@ -160,7 +158,6 @@
             }
         }
 
-        /* Nav */
         nav {
             position: sticky;
             top: 0;
@@ -260,7 +257,6 @@
             box-shadow: 0 6px 20px var(--accent-glow);
         }
 
-        /* Hero */
         .hero {
             position: relative;
             z-index: 1;
@@ -478,7 +474,6 @@
             color: var(--muted);
         }
 
-        /* Sections */
         section {
             position: relative;
             z-index: 1;
@@ -510,7 +505,6 @@
             max-width: 520px;
         }
 
-        /* Tech Grid */
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
@@ -621,7 +615,6 @@
             color: var(--ink);
         }
 
-        /* Projects */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -732,7 +725,6 @@
             transform: translateX(5px);
         }
 
-        /* About */
         .education-card {
             background: var(--panel);
             border: 1px solid var(--border);
@@ -894,7 +886,6 @@
             z-index: 1;
         }
 
-        /* Contact */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
@@ -1277,7 +1268,7 @@
                     <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
                     <div>
                         <div class="contact-item-label">Phone</div>
-                        <a href="tel:+256785750898" class="contact-item-value">+256 785 750 898</a>
+                        <a href="tel:+256785750898" class="contact-item-value">0785750898</a>
                     </div>
                 </div>
             </div>
@@ -1304,7 +1295,6 @@
         const icon = themeToggle.querySelector('i');
         const photoCard = document.getElementById('photoCard');
 
-        // Theme toggle
         themeToggle.addEventListener('click', () => {
             const current = body.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
@@ -1317,7 +1307,6 @@
         body.setAttribute('data-theme', saved);
         icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
-        // Try to load the image
         const img = new Image();
         img.onload = function() {
             photoCard.innerHTML = '';
@@ -1332,13 +1321,11 @@
         };
         img.src = 'Disan-removebg-preview.png';
 
-        // Navbar
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('scrolled', window.scrollY > 30);
         });
 
-        // Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1350,7 +1337,6 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(a => {
             a.addEventListener('click', function(e) {
                 const target = document.querySelector(this.getAttribute('href'));
